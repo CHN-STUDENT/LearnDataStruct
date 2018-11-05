@@ -1,0 +1,84 @@
+#include<iostream> 
+
+using namespace std;
+typedef int ElemType;
+
+/*除了算法导论之外，也可参考https://www.cnblogs.com/fu11211129/p/4214047.html*/ 
+
+typedef struct BitNode
+{
+	ElemType  data;
+//	struct BitNode *partnts;//父节点的地址 
+	struct BitNode *lch,*rch;//左右子树的地址 
+} BN,*BPtr;
+
+void Insert_SearchBin(BPtr &p,BPtr &z)
+{//参考算法导论P165和P166 
+	BPtr y=NULL;
+	BPtr x=p;
+	while(x!=NULL)
+	{
+		y=x;
+		if(z->data<x->data)
+			x=x->lch;
+		else
+			x=x->rch;
+	}
+//	z->partnts=y;//记录父节点的指针地址 
+	if(y==NULL)
+		p=z;//树空 
+	else if(z->data<y->data)
+		y->lch=z;
+	else
+		y->rch=z;
+}
+ 
+
+void Create_SearchBin(BPtr &p)
+{
+	cout<<"请输入节点信息，以-1停止:"<<endl; 
+	ElemType ch;
+	while(1)
+	{
+		cin>>ch;
+		if(ch==-1)
+			break;
+		BPtr z=(BPtr)new BN;//分配空间 
+		if(!z) //分配失败情况 
+			exit(-1);
+		z->data=ch;//记录值
+		Insert_SearchBin(p,z); //插入 
+	}
+}
+
+BPtr Search(BPtr p,ElemType x)
+{
+	while(p!=NULL&&x!=p->data)
+	{
+		if(x<p->data)
+			p=p->lch;
+		else
+			p=p->rch;
+	}
+	return p;
+}
+
+void Search_SearchBin(BPtr p)
+{//参考算法导论P163 
+	cout<<"请输入要搜索的值："<<endl; 
+	ElemType x;
+	cin>>x;
+	BPtr result=NULL;
+	result=Search(p,x); 
+	if(result==NULL)
+		cout<<"无法找到！"<<endl;
+	else
+		cout<<"已经找到！"<<endl;
+}
+
+int main(void)
+{
+	BPtr p=NULL;//令指针为空 
+	Create_SearchBin(p);
+	Search_SearchBin(p); 
+}
